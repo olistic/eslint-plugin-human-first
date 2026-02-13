@@ -50,6 +50,8 @@ export default {
         const comments = context.sourceCode.getAllComments();
 
         for (const comment of comments) {
+          if (comment.type === "Shebang") continue;
+
           if (!isAllowed(comment.value)) {
             context.report({
               loc: comment.loc,

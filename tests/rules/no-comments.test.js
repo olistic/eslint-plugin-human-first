@@ -103,6 +103,13 @@ describe("no-comments", () => {
     });
   });
 
+  it("allows shebang comments", () => {
+    tester.run("no-comments", rule, {
+      valid: ["#!/usr/bin/env node\nconst x = 1;"],
+      invalid: [],
+    });
+  });
+
   it("works with no options (disallows everything)", () => {
     tester.run("no-comments", rule, {
       valid: ["const x = 1;"],
