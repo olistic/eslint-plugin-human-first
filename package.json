@@ -2,13 +2,38 @@
   "name": "eslint-plugin-human-first",
   "version": "0.1.0",
   "description": "ESLint rules that keep AI-generated code readable by humans",
+  "author": "Matias Olivera",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olistic/eslint-plugin-human-first.git"
+  },
+  "homepage": "https://github.com/olistic/eslint-plugin-human-first#readme",
+  "bugs": {
+    "url": "https://github.com/olistic/eslint-plugin-human-first/issues"
+  },
   "type": "module",
   "exports": {
     ".": "./index.js",
     "./package.json": "./package.json"
   },
+  "files": [
+    "index.js",
+    "rules/",
+    "README.md"
+  ],
+  "engines": {
+    "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+  },
   "scripts": {
-    "test": "node --test tests/**/*.test.js"
+    "test": "node --test",
+    "prepublishOnly": "npm test"
+  },
+  "peerDependencies": {
+    "eslint": ">=9.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0"
   },
   "keywords": [
     "eslint",
@@ -17,19 +42,5 @@
     "ai",
     "readability",
     "human-first"
-  ],
-  "license": "MIT",
-  "peerDependencies": {
-    "eslint": ">=9.0.0"
-  },
-  "devDependencies": {
-    "eslint": "^9.0.0"
-  },
-  "files": [
-    "index.js",
-    "rules/"
-  ],
-  "engines": {
-    "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
-  }
+  ]
 }
