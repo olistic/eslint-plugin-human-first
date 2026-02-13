@@ -6,12 +6,13 @@ const tester = new RuleTester();
 
 describe("no-magic-values", () => {
   describe("numbers", () => {
-    it("allows ignored numbers (-1, 0, 1) by default", () => {
+    it("allows ignored numbers (-1, 0, 1, 2) by default", () => {
       tester.run("no-magic-values", rule, {
         valid: [
           "const i = arr.indexOf(x); if (i === -1) {}",
           "let count = 0;",
           "count += 1;",
+          "const half = x / 2;",
         ],
         invalid: [],
       });
@@ -53,7 +54,7 @@ describe("no-magic-values", () => {
         valid: ["const first = arr[0]; const second = arr[2];"],
         invalid: [
           {
-            code: "const x = arr[2];",
+            code: "const x = arr[5];",
             options: [{ ignoreArrayIndexes: false }],
             errors: [{ messageId: "noMagicNumber" }],
           },
@@ -68,6 +69,25 @@ describe("no-magic-values", () => {
           {
             code: "function foo(x = 10) {}",
             options: [{ ignoreDefaultValues: false }],
+            errors: [{ messageId: "noMagicNumber" }],
+          },
+        ],
+      });
+    });
+
+    it("allows radix arguments in parseInt, Number.parseInt, and .toString", () => {
+      tester.run("no-magic-values", rule, {
+        valid: [
+          "const num = parseInt(str, 10);",
+          "const hex = parseInt(str, 16);",
+          "const num = Number.parseInt(str, 10);",
+          "const hex = Number.parseInt(str, 16);",
+          "const str = num.toString(16);",
+          "const str = num.toString(10);",
+        ],
+        invalid: [
+          {
+            code: "const num = parseInt(10, str);",
             errors: [{ messageId: "noMagicNumber" }],
           },
         ],

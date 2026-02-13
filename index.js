@@ -29,7 +29,7 @@ Object.assign(plugin.configs, {
       "human-first/no-magic-values": [
         "error",
         {
-          ignoreNumbers: [-1, 0, 1],
+          ignoreNumbers: [-1, 0, 1, 2],
           ignoreArrayIndexes: true,
           ignoreDefaultValues: true,
         },

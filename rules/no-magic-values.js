@@ -26,7 +26,7 @@ export default {
       },
     ],
     defaultOptions: [
-      { ignoreNumbers: [-1, 0, 1], ignoreArrayIndexes: true, ignoreDefaultValues: true },
+      { ignoreNumbers: [-1, 0, 1, 2], ignoreArrayIndexes: true, ignoreDefaultValues: true },
     ],
     messages: {
       noMagicNumber:
@@ -102,8 +102,47 @@ export default {
       return false;
     }
 
+    function isRadixArgument(node) {
+      const { parent } = node;
+      if (parent.type !== "CallExpression") {
+        return false;
+      }
+      const { callee } = parent;
+      if (
+        parent.arguments[1] === node &&
+        callee.type === "Identifier" &&
+        callee.name === "parseInt"
+      ) {
+        return true;
+      }
+      if (
+        callee.type === "MemberExpression" &&
+        callee.property.type === "Identifier"
+      ) {
+        if (
+          parent.arguments[1] === node &&
+          callee.object.type === "Identifier" &&
+          callee.object.name === "Number" &&
+          callee.property.name === "parseInt"
+        ) {
+          return true;
+        }
+        if (
+          parent.arguments[0] === node &&
+          callee.property.name === "toString"
+        ) {
+          return true;
+        }
+      }
+      return false;
+    }
+
     function shouldIgnoreNumber(node) {
       if (ignoreNumbers.includes(node.value)) {
+        return true;
+      }
+
+      if (isRadixArgument(node)) {
         return true;
       }
 
