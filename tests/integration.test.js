@@ -34,8 +34,8 @@ describe("recommended config integration", () => {
       "should report max-params",
     );
     assert.ok(
-      ruleIds.includes("human-first/no-magic-values"),
-      "should report no-magic-values",
+      ruleIds.includes("human-first/no-magic-numbers"),
+      "should report no-magic-numbers",
     );
   });
 
@@ -95,7 +95,7 @@ describe("recommended config integration", () => {
 
   it("exposes both custom rules", () => {
     assert.ok(plugin.rules["no-comments"]);
-    assert.ok(plugin.rules["no-magic-values"]);
+    assert.ok(plugin.rules["no-magic-numbers"]);
   });
 
   it("config has a name for debugging", () => {

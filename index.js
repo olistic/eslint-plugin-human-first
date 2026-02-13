@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import noComments from "./rules/no-comments.js";
-import noMagicValues from "./rules/no-magic-values.js";
+import noMagicNumbers from "./rules/no-magic-numbers.js";
 
 const pkg = JSON.parse(
   readFileSync(new URL("./package.json", import.meta.url), "utf8"),
@@ -13,7 +13,7 @@ const plugin = {
   },
   rules: {
     "no-comments": noComments,
-    "no-magic-values": noMagicValues,
+    "no-magic-numbers": noMagicNumbers,
   },
   configs: {},
 };
@@ -26,7 +26,7 @@ Object.assign(plugin.configs, {
     },
     rules: {
       "human-first/no-comments": ["error"],
-      "human-first/no-magic-values": [
+      "human-first/no-magic-numbers": [
         "error",
         {
           ignoreNumbers: [-1, 0, 1, 2],

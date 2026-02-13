@@ -2,7 +2,7 @@
 
 ESLint rules that keep AI-generated code readable by humans.
 
-AI coding agents produce code that works but is hard to read: over-commented, long functions, magic values, too many parameters. Documentation hints get ignored. Linter errors don't.
+AI coding agents produce code that works but is hard to read: over-commented, long functions, magic numbers, too many parameters. Documentation hints get ignored. Linter errors don't.
 
 Inspired by [ESLint as AI Guardrails: The Rules That Make AI Code Readable](https://medium.com/@albro/eslint-as-ai-guardrails-the-rules-that-make-ai-code-readable-8899c71d3446).
 
@@ -33,7 +33,7 @@ The recommended config enables:
 | Rule | Source | Fixable | What it catches |
 |------|--------|---------|-----------------|
 | [`human-first/no-comments`](#no-comments) | custom | yes | AI over-explains with comments |
-| [`human-first/no-magic-values`](#no-magic-values) | custom | | Hardcoded numbers and strings |
+| [`human-first/no-magic-numbers`](#no-magic-numbers) | custom | | Hardcoded numbers |
 | [`max-params`](https://eslint.org/docs/latest/rules/max-params) | built-in | | Too many function parameters |
 | [`max-lines-per-function`](https://eslint.org/docs/latest/rules/max-lines-per-function) | built-in | | Functions that are too long |
 | [`max-lines`](https://eslint.org/docs/latest/rules/max-lines) | built-in | | Files that are too long |
@@ -43,8 +43,8 @@ The recommended config enables:
 ```js
 {
   "human-first/no-comments": "error",
-  "human-first/no-magic-values": ["error", {
-    ignoreNumbers: [-1, 0, 1],
+  "human-first/no-magic-numbers": ["error", {
+    ignoreNumbers: [-1, 0, 1, 2],
     ignoreArrayIndexes: true,
     ignoreDefaultValues: true
   }],
@@ -89,47 +89,43 @@ const z = 3;
 
 ---
 
-### `no-magic-values`
+### `no-magic-numbers`
 
-Disallow magic numbers **and strings** that should be named constants. Extends the concept of ESLint's built-in `no-magic-numbers` to also catch string literals.
+Disallow magic numbers that should be named constants.
 
 #### Options
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `ignoreNumbers` | `number[]` | `[-1, 0, 1]` | Numbers that are always allowed |
+| `ignoreNumbers` | `number[]` | `[-1, 0, 1, 2]` | Numbers that are always allowed |
 | `ignoreArrayIndexes` | `boolean` | `true` | Allow numbers as array indexes (`arr[0]`) |
-| `ignoreDefaultValues` | `boolean` | `true` | Allow literals in default parameter values |
+| `ignoreDefaultValues` | `boolean` | `true` | Allow numbers in default parameter values |
 
 #### Automatically ignored
 
 The rule is smart about context. These are never reported:
 
 - Values in `const` declarations (`const TIMEOUT = 3000`)
-- Import/export paths (`import x from "foo"`)
-- `require()` arguments
-- Object literal keys (`{ "content-type": value }`)
-- Empty strings
+- Radix arguments in `parseInt()`, `Number.parseInt()`, and `.toString()` (`parseInt(str, 16)`)
 - TypeScript enum members and type annotations
-- JSX attribute values
-- Expression statements (`"use strict"`)
 
 #### Examples
 
 ```js
 // bad
 if (status === 200) {}
-let role = "admin";
 setTimeout(fn, 3000);
 
 // good
 const STATUS_OK = 200;
-const ROLE_ADMIN = "admin";
 const TIMEOUT_MS = 3000;
 
 if (status === STATUS_OK) {}
-let role = ROLE_ADMIN;
 setTimeout(fn, TIMEOUT_MS);
+
+// also good — radix arguments are allowed
+const num = parseInt(str, 16);
+const hex = num.toString(16);
 ```
 
 ## Overriding rules
