@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-human-first",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "ESLint rules that keep AI-generated code readable by humans",
   "author": "Matias Olivera",
   "license": "MIT",

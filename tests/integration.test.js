@@ -1,7 +1,12 @@
+import { readFileSync } from "node:fs";
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { Linter } from "eslint";
 import plugin from "../index.js";
+
+const pkg = JSON.parse(
+  readFileSync(new URL("../package.json", import.meta.url), "utf8"),
+);
 
 describe("recommended config integration", () => {
   it("reports all rule violations on a bad sample file", () => {
@@ -85,7 +90,7 @@ describe("recommended config integration", () => {
 
   it("exposes plugin metadata", () => {
     assert.equal(plugin.meta.name, "eslint-plugin-human-first");
-    assert.equal(plugin.meta.version, "0.1.0");
+    assert.equal(plugin.meta.version, pkg.version);
   });
 
   it("exposes both custom rules", () => {
